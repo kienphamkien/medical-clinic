@@ -23,6 +23,6 @@ nav li a {
 }
 
 nav li a:hover {
-    color: yellow;
+    color: rgb(255, 0, 0);
     text-decoration: none;
 }

@@ -10,6 +10,8 @@ for example, to see a specialist, the patient needs an approval from his/her pri
 ### Before making changes make sure to pull changes from main branch
 1. `git pull origin main` 
 
+### Make sure to make your own branch
+
 ### Starting (server)
 
 1. `cd server`

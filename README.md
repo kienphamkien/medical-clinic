@@ -7,6 +7,9 @@ more doctors.
 Specific patient information is also kept in the database. Customers can schedule and cancel appointments either over the phone or using a web portal. Some restrictions apply -
 for example, to see a specialist, the patient needs an approval from his/her primary physician.
 
+### Before making changes make sure to pull changes from main branch
+1. `git pull origin main` 
+
 ### Starting (server)
 
 1. `cd server`

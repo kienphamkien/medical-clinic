@@ -1,2 +1,0 @@
-# medical-clinic
-Database project

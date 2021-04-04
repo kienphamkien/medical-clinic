@@ -1,5 +1,5 @@
 CREATE TABLE CLINIC(
-	ClinicID		INT NOT NULL,
+	ClinicID		INT,
     Address 		VARCHAR(30) NOT NULL,
     NumPatients 	INT,
     NumDoctors 		INT,
@@ -13,7 +13,7 @@ CREATE TABLE DOCTOR(
     Minit			CHAR,
     Lname			VARCHAR(15)	NOT NULL,
     Address 		VARCHAR(30),
-    DoctorID 		INT	NOT NULL,
+    DoctorID 		INT,
     PhoneNumber 	INT	NOT NULL,
     DOB				DATE,
     ClinicID	INT,
@@ -26,7 +26,7 @@ CREATE TABLE PATIENT(
     Minit			CHAR,
     Lname			VARCHAR(15) NOT NULL,
     Address 		VARCHAR(30),
-    PatientID 		INT	NOT NULL,
+    PatientID 		INT,
     Email 			VARCHAR(30),
     SSN				CHAR(9) NOT NULL,
     PhoneNumber 	INT NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE PATIENT(
 );
 
 CREATE TABLE EMERGENCY_CONTACT(
-	ContactID       INT NOT NULL,
+	ContactID       INT,
 	Fname			VARCHAR(15) NOT NULL,
     Minit			CHAR,
     Lname			VARCHAR(15) NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE EMERGENCY_CONTACT(
 
 
 CREATE TABLE MEDICAL_CHART(
-	PatientID		INT NOT NULL,
+	PatientID		INT,
 	Sex				VARCHAR(10) NOT NULL,
     BloodType		VARCHAR(10),
     Height			VARCHAR(15),
@@ -67,7 +67,7 @@ CREATE TABLE MEDICAL_CHART(
 );
 
 CREATE TABLE APPOINTMENT(
-	AppointID		INT	NOT NULL,
+	AppointID		INT,
 	AppointTime		DATETIME    NOT NULL,
     DoctorID		INT NOT NULL,
     PatientID       INT NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE APPOINTMENT(
 );
 
 CREATE TABLE APPOINTMENT_REPORT(
-	AppointID		INT NOT NULL,
+	AppointID		INT,
     Diagnosis		VARCHAR(100),
     Summary			VARCHAR(100),
     PRIMARY KEY (AppointID),
@@ -91,7 +91,7 @@ CREATE TABLE APPOINTMENT_REPORT(
 );
 
 CREATE TABLE INSURANCE(
-    PolicyID        INT NOT NULL,
+    PolicyID        INT,
 	Provider		VARCHAR(15)				NOT NULL,
     ExpiDate		DATE					NOT NULL,
     InsurancePolicy	VARCHAR(50)				NOT NULL,
@@ -102,14 +102,14 @@ CREATE TABLE INSURANCE(
 
 CREATE TABLE StaffRole(
     RoleName VARCHAR(30),
-    RoleNo INT NOT NULL,
+    RoleNo INT,
     RoleDescription VARCHAR(200),
     PRIMARY KEY (RoleNo)
 );
 
 CREATE TABLE STAFF(
-    StaffID        INT NOT NULL,
-	StaffRoleNo		INT NOT NULL,
+    StaffID        INT,
+	StaffRoleNo		INT,
 	Fname			VARCHAR(15)				NOT NULL,
     Minit			CHAR,
     Lname			VARCHAR(15)				NOT NULL,

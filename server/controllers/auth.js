@@ -43,7 +43,7 @@ exports.register = (req, res) => {
             } else {
                 console.log(results);
                 return res.render('register', {
-                    message: 'User registered.'
+                    message: 'User registered! You can now login with your email address and password.'
                 });
             }
         });

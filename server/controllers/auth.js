@@ -33,7 +33,8 @@ exports.register = (req, res) => {
         let hashedPassword = await bcryptjs.hash(Password, 8);
         console.log(hashedPassword);
 
-        db.query('INSERT INTO PATIENT set? ', {Fname: Fname, Minit: Minit, Lname: Lname, DOB: DOB, Address: Address, PhoneNumber: PhoneNumber, Email: Email, Pass: Password}, (error, results) =>{
+        db.query('INSERT INTO PATIENT set ? ', {Fname: Fname, Minit: Minit, Lname: Lname, DOB: DOB, Address: Address, PhoneNumber: PhoneNumber, Email: Email, Pass: hashedPassword}, (error, results) =>{
+            console.log(results);
             if (error) {
                 console.log(error);
             } else {
@@ -44,4 +45,32 @@ exports.register = (req, res) => {
             }
         });
     });
+}
+
+
+exports.login = async (req, res) => {
+    try {
+        const {Email, Password} = req.body;
+        // if (!Email || !Password) {
+        //     return res.status(400).render('login'), {
+        //         message: 'Please enter email and password.'
+        //     }
+        // }
+        // var nene = bcryptjs.hash("thatlavailon", 8);
+        db.query('SELECT * FROM PATIENT WHERE Email = ?', [Email], async (error, results) => {
+            console.log(results);
+            if (results.length && !(await bcryptjs.compare(Password, results[0].Pass))) {
+                res.status(401).render('login', {
+                    message: 'Email or Password is incorrect.'
+                })}
+            else if (!results.length) {
+                res.status(401).render('login', {
+                    message: 'Email or Password is incorrect.'
+                })}
+        });
+
+
+    } catch (error) {
+        console.log(error);
+    }
 }

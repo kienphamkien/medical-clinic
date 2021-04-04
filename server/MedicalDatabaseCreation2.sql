@@ -7,7 +7,6 @@ CREATE TABLE CLINIC(
     PRIMARY	KEY(ClinicID)
 );
 
-
 CREATE TABLE DOCTOR(
 	Fname			VARCHAR(15)	NOT NULL,
     Minit			CHAR,
@@ -22,21 +21,23 @@ CREATE TABLE DOCTOR(
 );
 
 CREATE TABLE PATIENT(
+	PatientID 		INT AUTO_INCREMENT,
 	Fname			VARCHAR(15) NOT NULL,
-    Minit			CHAR,
+    Minit			VARCHAR(5),
     Lname			VARCHAR(15) NOT NULL,
-    Address 		VARCHAR(30),
-    PatientID 		INT,
+    Address 		VARCHAR(100) NOT NULL,
     Email 			VARCHAR(30),
-    SSN				CHAR(9) NOT NULL,
-    PhoneNumber 	INT NOT NULL,
+    SSN				CHAR(9),
+    PhoneNumber 	VARCHAR(15) NOT NULL,
     Relation		VARCHAR(30),
-    DOB				DATE,
-    PrimePhysID		INT NOT NULL,
+    DOB				DATE NOT NULL,
+    PrimePhysID		INT,
+    Pass 		VARCHAR(30),
     UNIQUE (SSN),
     PRIMARY KEY (PatientID),
     FOREIGN KEY (PrimePhysID) REFERENCES DOCTOR	(DoctorID)
 );
+
 
 CREATE TABLE EMERGENCY_CONTACT(
 	ContactID       INT,
@@ -45,7 +46,7 @@ CREATE TABLE EMERGENCY_CONTACT(
     Lname			VARCHAR(15) NOT NULL,
 	DOB				DATE,
     Address 		VARCHAR(30),
-    PhoneNumber 	INT NOT NULL,
+    PhoneNumber 	VARCHAR(14) NOT NULL,
     Relationship	VARCHAR(30),
     PRIMARY KEY (ContactID),
     FOREIGN KEY (ContactID) REFERENCES DOCTOR(DoctorID),
@@ -119,4 +120,3 @@ CREATE TABLE STAFF(
     PRIMARY KEY (StaffID),
 	FOREIGN KEY (StaffRoleNo) REFERENCES StaffRole(RoleNo)
 );
-

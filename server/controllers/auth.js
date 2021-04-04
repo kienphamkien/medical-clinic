@@ -33,7 +33,7 @@ exports.register = (req, res) => {
         let hashedPassword = await bcryptjs.hash(Password, 8);
         console.log(hashedPassword);
 
-        db.query('INSERT INTO PATIENT set? ', {Fname: Fname, Minit: Minit, Lname: Lname, DOB: DOB, Address: Address, PhoneNumber: PhoneNumber, Email: Email, Password: Password}, (error, results) =>{
+        db.query('INSERT INTO PATIENT set? ', {Fname: Fname, Minit: Minit, Lname: Lname, DOB: DOB, Address: Address, PhoneNumber: PhoneNumber, Email: Email, Pass: Password}, (error, results) =>{
             if (error) {
                 console.log(error);
             } else {

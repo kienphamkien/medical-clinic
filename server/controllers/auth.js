@@ -11,10 +11,6 @@ const db = mysql.createConnection({
     database: process.env.database
 });
 
-
-
-
-
 exports.register = (req, res) => {
     console.log(req.body);
 

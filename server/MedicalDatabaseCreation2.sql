@@ -68,18 +68,19 @@ CREATE TABLE MEDICAL_CHART(
 );
 
 CREATE TABLE APPOINTMENT(
-	AppointID		INT,
-	AppointTime		DATETIME    NOT NULL,
-    DoctorID		INT NOT NULL,
-    PatientID       INT NOT NULL,
-    LocationID		INT	NOT NULL,
+	AppointID		INT AUTO_INCREMENT,
+    AppointDay      DATE,
+	AppointTime		TEXT(15),
+    DoctorID		INT,
+    FName           TEXT(25) NOT NULL,
+    LName           TEXT(25) NOT NULL,
+    PatientID       INT,
     InsuranceProv	VARCHAR(15),
-    PhysicianAppr	VARCHAR(15),
     Reason			VARCHAR(30),
+    isDeleted       INT DEFAULT 0, /* Attribute so we can perform soft deletes, in case an appointment is cancelled, instead of completely deleting the entry*/
     UNIQUE (PatientID),
     PRIMARY KEY (AppointID),
-    FOREIGN KEY (LocationID) REFERENCES CLINIC (ClinicID),
-    FOREIGN KEY (PatientID) REFERENCES PATIENT (PatientID),
+    /*FOREIGN KEY (PatientID) REFERENCES PATIENT (PatientID), This statement wouldn't allow our patients to set up multiple appointments*/
     FOREIGN KEY (DoctorID) REFERENCES DOCTOR (DoctorID)
 );
 
@@ -89,16 +90,6 @@ CREATE TABLE APPOINTMENT_REPORT(
     Summary			VARCHAR(100),
     PRIMARY KEY (AppointID),
     FOREIGN KEY (AppointID) REFERENCES APPOINTMENT (AppointID)
-);
-
-CREATE TABLE INSURANCE(
-    PolicyID        INT,
-	Provider		VARCHAR(15)				NOT NULL,
-    ExpiDate		DATE					NOT NULL,
-    InsurancePolicy	VARCHAR(50)				NOT NULL,
-    PatientID       INT NOT NULL,
-    PRIMARY KEY (PolicyID),
-    FOREIGN KEY (PatientID) REFERENCES PATIENT(PatientID)
 );
 
 CREATE TABLE StaffRole(
@@ -167,4 +158,8 @@ FOR EACH ROW BEGIN
 	END IF ;
 END$$
 
+<<<<<<< HEAD
 DELIMITER ;
+=======
+DELIMITER ;
+>>>>>>> a7c1d9b0aa1718636cb086b2f6d86819dbec62c3

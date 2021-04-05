@@ -158,4 +158,8 @@ FOR EACH ROW BEGIN
 	END IF ;
 END$$
 
+<<<<<<< HEAD
 DELIMITER ;
+=======
+DELIMITER ;
+>>>>>>> a7c1d9b0aa1718636cb086b2f6d86819dbec62c3

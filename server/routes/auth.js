@@ -11,6 +11,7 @@ router.get('/', (req,res)=>{
 router.get('/register', (req,res)=>{
     res.render('register');
 });*/
+router.post('/login', authController.login);
 
 router.post('/register', authController.register); //
 

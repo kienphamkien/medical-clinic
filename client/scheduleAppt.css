@@ -23,6 +23,10 @@ nav li a {
 }
 
 nav li a:hover {
-    color: yellow;
+    color: orange;
     text-decoration: none;
+}
+
+button{
+    margin-left: 50%;
 }

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link rel="stylesheet" href="/scheduleAppt.css">
+    <title>Documasdasdent</title>
+</head>
+<body>
+    <nav>
+        <h4>Medical Clinic</h4>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/scheduleAppt">Schedule an Appointment</a></li>
+            <li><a href="/rescheduleAppt">Reschedule an Appointment</a></li>
+            <li><a href="/cancelAppt">Cancel an Appointment</a></li>
+        </ul>
+    </nav>
+    <div class="container mt-4"> <!-- Centers everything  -->
+
+    <!-- In here youd place what you want inside your webpage -->
+        <form action="/auth/scheduleAppt" method="POST">
+
+            <div class="mb-3">
+                <label for="FName" class="form-label">First Name</label>
+                <input type="text" class="FName" id="FName" name="FName" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="LName" class="form-label">Last Name</label>
+                <input type="text" class="LName" id="LName" name="LName" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="ID" class="form-label">Your Patient ID</label>
+                <input type="text" class="ID" id="ID" name="ID" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="reason" class="form-label">Reason for visit</label>
+                <textarea class="reason" id="reason" name="reason" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="AppointDay" class="form-label">Select a Date</label>
+                <input type="date" class="AppointDay" id="AppointDay" name= "AppointDay">
+            </div>
+            
+            <div class="col-sm-3">
+                <label for="time">Time</label>
+                <select class="time" id="time" name="time">
+                    <option selected>Choose...</option>
+                    <option value="8">8:00 AM</option>
+                    <option value="9">9:00 AM</option>
+                    <option value="10">10:00 AM</option>
+                    <option value="11">11:00 AM</option>
+                    <option value="12">12:00 PM</option>
+                    <option value="1">1:00 PM</option>
+                    <option value="2">2:00 PM</option>
+                    <option value="3">3:00 PM</option>
+                    <option value="4">4:00 PM</option>
+                    <option value="5">5:00 PM</option>
+                </select>
+            </div>
+
+            <div class="col-sm-3">
+                <label for="paymentMethod">Payment Method</label>
+                <select class="paymentMethod" id="paymentMethod" name="paymentMethod">
+                    <option selected>Choose...</option>
+                    <option value="Insurance">Insurance</option>
+                    <option value="Cash">Cash</option>
+                </select>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+        </form>
+        {{#if message}}
+            <h4 class="alert alert-danger mt-4">{{message}}</h4>
+        {{/if}}
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+</body>
+</html>

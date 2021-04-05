@@ -1,5 +1,5 @@
 CREATE TABLE CLINIC(
-	ClinicID		INT NOT NULL,
+	ClinicID		INT,
     Address 		VARCHAR(30) NOT NULL,
     NumPatients 	INT,
     NumDoctors 		INT,
@@ -7,13 +7,12 @@ CREATE TABLE CLINIC(
     PRIMARY	KEY(ClinicID)
 );
 
-
 CREATE TABLE DOCTOR(
 	Fname			VARCHAR(15)	NOT NULL,
     Minit			CHAR,
     Lname			VARCHAR(15)	NOT NULL,
     Address 		VARCHAR(30),
-    DoctorID 		INT	NOT NULL,
+    DoctorID 		INT,
     PhoneNumber 	INT	NOT NULL,
     DOB				DATE,
     ClinicID	INT,
@@ -22,30 +21,32 @@ CREATE TABLE DOCTOR(
 );
 
 CREATE TABLE PATIENT(
+	PatientID 		INT AUTO_INCREMENT,
 	Fname			VARCHAR(15) NOT NULL,
-    Minit			CHAR,
+    Minit			VARCHAR(5),
     Lname			VARCHAR(15) NOT NULL,
-    Address 		VARCHAR(30),
-    PatientID 		INT	NOT NULL,
+    Address 		VARCHAR(100) NOT NULL,
     Email 			VARCHAR(30),
-    SSN				CHAR(9) NOT NULL,
-    PhoneNumber 	INT NOT NULL,
+    SSN				CHAR(9),
+    PhoneNumber 	VARCHAR(15) NOT NULL,
     Relation		VARCHAR(30),
-    DOB				DATE,
-    PrimePhysID		INT NOT NULL,
+    DOB				DATE NOT NULL,
+    PrimePhysID		INT,
+    Pass 		VARCHAR(30),
     UNIQUE (SSN),
     PRIMARY KEY (PatientID),
     FOREIGN KEY (PrimePhysID) REFERENCES DOCTOR	(DoctorID)
 );
 
+
 CREATE TABLE EMERGENCY_CONTACT(
-	ContactID       INT NOT NULL,
+	ContactID       INT,
 	Fname			VARCHAR(15) NOT NULL,
     Minit			CHAR,
     Lname			VARCHAR(15) NOT NULL,
 	DOB				DATE,
     Address 		VARCHAR(30),
-    PhoneNumber 	INT NOT NULL,
+    PhoneNumber 	VARCHAR(14) NOT NULL,
     Relationship	VARCHAR(30),
     PRIMARY KEY (ContactID),
     FOREIGN KEY (ContactID) REFERENCES DOCTOR(DoctorID),
@@ -54,7 +55,7 @@ CREATE TABLE EMERGENCY_CONTACT(
 
 
 CREATE TABLE MEDICAL_CHART(
-	PatientID		INT NOT NULL,
+	PatientID		INT,
 	Sex				VARCHAR(10) NOT NULL,
     BloodType		VARCHAR(10),
     Height			VARCHAR(15),
@@ -67,49 +68,40 @@ CREATE TABLE MEDICAL_CHART(
 );
 
 CREATE TABLE APPOINTMENT(
-	AppointID		INT	NOT NULL,
-	AppointTime		DATETIME    NOT NULL,
-    DoctorID		INT NOT NULL,
-    PatientID       INT NOT NULL,
-    LocationID		INT	NOT NULL,
+	AppointID		INT AUTO_INCREMENT,
+    AppointDay      DATE,
+	AppointTime		TEXT(15),
+    DoctorID		INT,
+    FName           TEXT(25) NOT NULL,
+    LName           TEXT(25) NOT NULL,
+    PatientID       INT,
     InsuranceProv	VARCHAR(15),
-    PhysicianAppr	VARCHAR(15),
     Reason			VARCHAR(30),
+    isDeleted       INT DEFAULT 0, /* Attribute so we can perform soft deletes, in case an appointment is cancelled, instead of completely deleting the entry*/
     UNIQUE (PatientID),
     PRIMARY KEY (AppointID),
-    FOREIGN KEY (LocationID) REFERENCES CLINIC (ClinicID),
-    FOREIGN KEY (PatientID) REFERENCES PATIENT (PatientID),
+    /*FOREIGN KEY (PatientID) REFERENCES PATIENT (PatientID), This statement wouldn't allow our patients to set up multiple appointments*/
     FOREIGN KEY (DoctorID) REFERENCES DOCTOR (DoctorID)
 );
 
 CREATE TABLE APPOINTMENT_REPORT(
-	AppointID		INT NOT NULL,
+	AppointID		INT,
     Diagnosis		VARCHAR(100),
     Summary			VARCHAR(100),
     PRIMARY KEY (AppointID),
     FOREIGN KEY (AppointID) REFERENCES APPOINTMENT (AppointID)
 );
 
-CREATE TABLE INSURANCE(
-    PolicyID        INT NOT NULL,
-	Provider		VARCHAR(15)				NOT NULL,
-    ExpiDate		DATE					NOT NULL,
-    InsurancePolicy	VARCHAR(50)				NOT NULL,
-    PatientID       INT NOT NULL,
-    PRIMARY KEY (PolicyID),
-    FOREIGN KEY (PatientID) REFERENCES PATIENT(PatientID)
-);
-
 CREATE TABLE StaffRole(
     RoleName VARCHAR(30),
-    RoleNo INT NOT NULL,
+    RoleNo INT,
     RoleDescription VARCHAR(200),
     PRIMARY KEY (RoleNo)
 );
 
 CREATE TABLE STAFF(
-    StaffID        INT NOT NULL,
-	StaffRoleNo		INT NOT NULL,
+    StaffID        INT,
+	StaffRoleNo		INT,
 	Fname			VARCHAR(15)				NOT NULL,
     Minit			CHAR,
     Lname			VARCHAR(15)				NOT NULL,
@@ -120,3 +112,50 @@ CREATE TABLE STAFF(
 	FOREIGN KEY (StaffRoleNo) REFERENCES StaffRole(RoleNo)
 );
 
+DELIMITER $$
+CREATE TRIGGER APPOINTMENT_TIME_VIOLATION_INS
+BEFORE INSERT ON APPOINTMENT
+FOR EACH ROW BEGIN 
+	IF(NEW.AppointTime < NOW()) then
+		SIGNAL SQLSTATE '02000' SET MESSAGE_TEXT = 'INVALID APPOINTMENT TIME!';
+	END IF ;
+END$$
+
+DELIMITER ;
+
+	   
+DELIMITER $$
+CREATE TRIGGER APPOINTMENT_TIME_VIOLATION_UPD
+BEFORE UPDATE ON APPOINTMENT
+FOR EACH ROW BEGIN 
+	IF(NEW.AppointTime < NOW()) then
+		SIGNAL SQLSTATE '02000' SET MESSAGE_TEXT = 'INVALID APPOINTMENT TIME!';
+	END IF ;
+END$$
+
+DELIMITER ;
+
+
+	   
+DELIMITER $$
+CREATE TRIGGER NUMBER_PATIENTS_AVAILABLE_INS
+BEFORE INSERT ON PATIENT
+FOR EACH ROW BEGIN 
+	IF(NEW.DOB > NOW()) then
+		SIGNAL SQLSTATE '02000' SET MESSAGE_TEXT = 'INVALID DOB!';
+	END IF ;
+END$$
+
+DELIMITER ;
+
+	   
+DELIMITER $$
+CREATE TRIGGER NUMBER_PATIENTS_AVAILABLE_UPD
+BEFORE UPDATE ON PATIENT
+FOR EACH ROW BEGIN 
+	IF(NEW.DOB > NOW()) then
+		SIGNAL SQLSTATE '02000' SET MESSAGE_TEXT = 'INVALID DOB!';
+	END IF ;
+END$$
+
+DELIMITER ;

@@ -9,4 +9,25 @@ router.get('/register', (req, res) =>{
     res.render('register');
 });
 
+
+//loading the pages that i added!
+router.get('/patient', (req, res)=>{
+    res.render('patient');
+});
+
+router.get('/scheduleAppt', (req,res)=>{
+    res.render('scheduleAppt');
+});
+
+router.get('/cancelAppt', (req,res)=>{
+    res.render('cancelAppt');
+});
+
+router.get('/rescheduleAppt', (req,res)=>{
+    res.render('rescheduleAppt');
+});
+
+
+//****************** */
+
 module.exports = router;

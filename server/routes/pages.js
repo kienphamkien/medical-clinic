@@ -33,5 +33,20 @@ router.get('/login', (req, res) =>{
     res.render('login');
 });
 
+router.get('/staff', (req,res)=>{
+    res.render('staff.hbs');
+});
+
+router.get('/requestMC', (req,res)=>{
+    res.render('requestMC.hbs');
+});
+
+router.get('/createMC', (req,res)=>{
+    res.render('createMC.hbs');
+});
+
+router.get('/fillMC', (req,res)=>{
+    res.render('fillMC.hbs');
+});
 
 module.exports = router;

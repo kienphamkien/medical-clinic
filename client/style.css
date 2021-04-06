@@ -23,6 +23,24 @@ nav li a {
 }
 
 nav li a:hover {
-    color: yellow;
+    color: rgb(255, 0, 0);
     text-decoration: none;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+  
+h3{
+    margin-top: 5%;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+p{
+    margin-left: 15%;
+    margin-right: 15%;
 }

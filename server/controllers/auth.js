@@ -1,9 +1,6 @@
 const mysql = require("mysql");
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
-
-const LocalStrategy = require('passport-local').Strategy;
-
 
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST, 
@@ -175,6 +172,26 @@ exports.login = async (req, res) => {
                 res.status(401).render('login', {
                     message: 'Email or Password is incorrect.'
                 })}
+            else {
+                const PatientID = results[0].PatientID;
+
+                const token = jwt.sign({ PatientID }, process.env.JWT_SECRET, {
+                  expiresIn: process.env.JWT_EXPIRES_IN
+                });
+        
+                console.log("The token is: " + token);
+        
+                const cookieOptions = {
+                  expires: new Date(
+                    Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+                  ),
+                  httpOnly: true
+                }
+        
+                res.cookie('jwt', token, cookieOptions );
+                res.status(200).redirect("/patient");
+
+            }
         });
 
 
@@ -182,35 +199,3 @@ exports.login = async (req, res) => {
         console.log(error);
     }
 }
-
-// module.exports = passport => {
-//     passport.use(
-//         new LocalStrategy({ usernameField: 'Email', passwordField: 'Password', passReqToCallback:true }, (req, Email, Password, done) => {
-//         // Match user
-//             db.query('SELECT * FROM PATIENT WHERE Email = ?', [Email], async (error, results) => {
-//                 console.log(results);
-//                 if (error) {return done(error)}
-//                 else if (results.length && !(await bcryptjs.compare(Password, results[0].Pass))) {
-//                     return done(null, false, { message : 'Email or Password is incorrect.'})
-//                 }
-//                 else if (!results.length) {
-//                     return done(null, false, { message : 'Email or Password is incorrect.'})
-//                 }
-//                 else {
-//                     return done(null, results[0])
-//                 }})
-//             }
-//         ))
-    
-//        // used to serialize the user for the session
-//     passport.serializeUser(function(PatientID, done) {
-// 		done(null, results[0].PatientID);
-//     });
-
-//     // used to deserialize the user
-//     passport.deserializeUser(function(PatientID, done) {
-// 	    db.query('SELECT * FROM PATIENT WHERE PatientID = ?', [PatientID], async (error, results) => {	
-// 			done(err, results[0]);
-// 		});
-//     });
-// }

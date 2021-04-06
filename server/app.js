@@ -10,23 +10,6 @@ dotenv.config({path:'./.env'});
 
 
 
-
-app.use(session({
-	secret: 'vidyapathaisalwaysrunning',
-	resave: true,
-	saveUninitialized: true
- } )); // session secret
-
-
-var passport = require('passport');
-require('./controllers/passport-config')(passport);
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-
-
-
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST, 
     user: process.env.DATABASE_USER,
@@ -56,7 +39,6 @@ db.connect((error) => {
 //better explanation of the video in video 5 towards the end\
 app.use('/', require('./routes/pages')); //
 app.use('/auth', require('./routes/auth'));//whatver starts 
-
 
 
 app.listen(5001, () => {

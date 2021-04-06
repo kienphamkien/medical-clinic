@@ -1,7 +1,5 @@
 const express = require('express');
 const authController = require('../controllers/auth');
-const PassportController = require('../controllers/passport-config');
-
 const router = express.Router(); 
 
 /*
@@ -12,7 +10,7 @@ router.get('/', (req,res)=>{
 router.get('/register', (req,res)=>{
     res.render('register');
 });*/
-router.post('/login', PassportController);
+router.post('/login', authController.login);
 
 // router.post('/login', passport.authenticate('local-login', {
 //     successRedirect : '/', // redirect to the secure profile section

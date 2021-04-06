@@ -23,6 +23,9 @@ router.get('/cancelAppt', (req,res)=>{
     res.render('cancelAppt');
 });
 
+
+
+
 router.get('/rescheduleAppt', (req,res)=>{
     res.render('rescheduleAppt');
 });

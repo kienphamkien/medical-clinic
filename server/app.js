@@ -1,10 +1,30 @@
 const express = require("express");
 const app = express();
+const session  = require('express-session');
+
 const path = require('path');
 
 const mysql = require("mysql");
 const dotenv = require("dotenv");
 dotenv.config({path:'./.env'});
+
+
+
+
+app.use(session({
+	secret: 'vidyapathaisalwaysrunning',
+	resave: true,
+	saveUninitialized: true
+ } )); // session secret
+
+
+var passport = require('passport');
+require('./controllers/passport-config')(passport);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 
 const db = mysql.createConnection({

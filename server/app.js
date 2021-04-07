@@ -1,10 +1,13 @@
 const express = require("express");
 const app = express();
+const session  = require('express-session');
+
 const path = require('path');
 
 const mysql = require("mysql");
 const dotenv = require("dotenv");
 dotenv.config({path:'./.env'});
+
 
 
 const db = mysql.createConnection({
@@ -36,7 +39,6 @@ db.connect((error) => {
 //better explanation of the video in video 5 towards the end\
 app.use('/', require('./routes/pages')); //
 app.use('/auth', require('./routes/auth'));//whatver starts 
-
 
 
 app.listen(5001, () => {

@@ -144,7 +144,7 @@ exports.register = (req, res) => {
                 console.log(error);
             } else {
                 console.log(results);
-                return res.render('register', {
+                return res.render('login', {
                     message: 'User registered! You can now login with your email address and password.'
                 });
             }
@@ -172,6 +172,26 @@ exports.login = async (req, res) => {
                 res.status(401).render('login', {
                     message: 'Email or Password is incorrect.'
                 })}
+            else {
+                const PatientID = results[0].PatientID;
+
+                const token = jwt.sign({ PatientID }, process.env.JWT_SECRET, {
+                  expiresIn: process.env.JWT_EXPIRES_IN
+                });
+        
+                console.log("The token is: " + token);
+        
+                const cookieOptions = {
+                  expires: new Date(
+                    Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+                  ),
+                  httpOnly: true
+                }
+        
+                res.cookie('jwt', token, cookieOptions );
+                res.status(200).redirect("/patient");
+
+            }
         });
 
 

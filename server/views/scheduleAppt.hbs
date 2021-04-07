@@ -13,17 +13,25 @@
         <h4>Medical Clinic</h4>
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/scheduleAppt">Schedule an Appointment</a></li>
-            <li><a href="/rescheduleAppt">Reschedule an Appointment</a></li>
-            <li><a href="/cancelAppt">Cancel an Appointment</a></li>
+            
         </ul>
     </nav>
     <div class="container mt-4"> <!-- Centers everything  -->
 
     <!-- In here youd place what you want inside your webpage -->
+
+        <h1 class="profile">Welcome to your profile page!</h1>
+        <p class="start">To get started simply click one of the options below.</p>
+
+         <div class="btn-group pb-4" role="group" aria-label="Basic outlined example">
+          <a class="btn btn-outline-primary active" aria-current="page">Schedule an Appointment</a>
+          <a href="/rescheduleAppt" class="btn btn-outline-primary">Reschedule an Appointment</a>
+          <a href="/cancelAppt" class="btn btn-outline-primary">Cancel an Appointment</a>
+         </div>
+
         <form action="/auth/scheduleAppt" method="POST">
 
-            <div class="mb-3">
+            <div class=" mb-3 ">
                 <label for="FName" class="form-label">First Name</label>
                 <input type="text" class="FName" id="FName" name="FName" required>
             </div>
@@ -39,16 +47,11 @@
             </div>
 
             <div class="mb-3">
-                <label for="reason" class="form-label">Reason for visit</label>
-                <textarea class="reason" id="reason" name="reason" rows="3"></textarea>
-            </div>
-
-            <div class="mb-3">
                 <label for="AppointDay" class="form-label">Select a Date</label>
                 <input type="date" class="AppointDay" id="AppointDay" name= "AppointDay">
             </div>
             
-            <div class="col-sm-3">
+            <div class="col-sm-3 pb-3">
                 <label for="time">Time</label>
                 <select class="time" id="time" name="time">
                     <option selected>Choose...</option>
@@ -65,7 +68,7 @@
                 </select>
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-sm-3 pb-3">
                 <label for="paymentMethod">Payment Method</label>
                 <select class="paymentMethod" id="paymentMethod" name="paymentMethod">
                     <option selected>Choose...</option>
@@ -74,6 +77,12 @@
                 </select>
             </div>
 
+            <div class="mb-3">
+                <label for="reason" class="form-label">Reason for visit</label>
+                <textarea class="form-control reason" id="reason" name="reason" rows="3"></textarea>
+            </div>
+
+            <a href="/patient" class="btn btn-secondary btn " tabindex="-1" role="button" aria-disabled="false">Cancel</a>
 
             <button type="submit" class="btn btn-primary">Submit</button>
 

@@ -13,17 +13,23 @@
         <h4>Medical Clinic</h4>
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/scheduleAppt">Schedule an Appointment</a></li>
-            <li><a href="/rescheduleAppt">Reschedule an Appointment</a></li>
-            <li><a href="/cancelAppt">Cancel an Appointment</a></li>
         </ul>
     </nav>
     <div class="container mt-4"> <!-- Centers everything  -->
 
     <!-- In here youd place what you want inside your webpage -->
 
+        <h1 class="profile">Welcome to your profile page!</h1>
+        <p class="start">To get started simply click one of the options below.</p>
+
+         <div class="btn-group pb-4" role="group" aria-label="Basic outlined example">
+          <a href="/scheduleAppt" class="btn btn-outline-primary" aria-current="page">Schedule an Appointment</a>
+          <a class="btn btn-outline-primary active">Reschedule an Appointment</a>
+          <a href="/cancelAppt" class="btn btn-outline-primary">Cancel an Appointment</a>
+         </div>
+
         <form action="/auth/rescheduleAppt" method="POST">
-            <div class="mb-3">
+            <div class= "mb-3">
                 <label for="patientID" class="form-label">Patient ID</label>
                 <input type="text" class="patientID" id="patientID" name="patientID" required>
             </div>
@@ -54,7 +60,8 @@
                     <option value="5">5:00 PM</option>
                 </select>
             </div>
-
+            
+            <a href="/patient" class="btn btn-secondary btn " tabindex="-1" role="button" aria-disabled="false">Cancel</a>
             <button type="submit" class="btn btn-primary">Submit</button>
 
         </form>

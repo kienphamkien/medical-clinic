@@ -32,7 +32,7 @@ CREATE TABLE PATIENT(
     Relation		VARCHAR(30),
     DOB				DATE NOT NULL,
     PrimePhysID		INT,
-    Pass 		VARCHAR(30),
+    Pass 		VARCHAR(200),
     UNIQUE (SSN),
     PRIMARY KEY (PatientID),
     FOREIGN KEY (PrimePhysID) REFERENCES DOCTOR	(DoctorID)

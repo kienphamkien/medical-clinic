@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const session  = require('express-session');
-
+const cookieParser = require('cookie-parser')
 const path = require('path');
 
 const mysql = require("mysql");
@@ -23,6 +23,7 @@ app.use(express.static(clientDir)); //to grab all static files
 app.use(express.urlencoded({extended:false})); //to make sure you can grab the data from any form 
 
 app.use(express.json()); //makes sure that the values from the form come in as json
+app.use(cookieParser());
 
 app.set('view engine', 'hbs'); //setting the view engine as hbs templates
 
@@ -36,7 +37,7 @@ db.connect((error) => {
 
 //define routes. It goes from these routes into the pages file in the routes folder. The pages file looks at the route defined and
 //goes into the specific file. It then looks at the form and submits the the action label of the form via the method you defined (post)
-//better explanation of the video in video 5 towards the end\
+
 app.use('/', require('./routes/pages')); //
 app.use('/auth', require('./routes/auth'));//whatver starts 
 

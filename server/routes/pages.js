@@ -28,19 +28,36 @@ router.get('/patient', authController.isLoggedIn, (req, res) => {
       res.status(401).render('login', { message : 'You need to login to view this page!'});
     }
 });
-
-router.get('/scheduleAppt', (req,res)=>{
-    res.render('scheduleAppt');
+router.get('/scheduleAppt', authController.isLoggedIn, (req, res) => {
+    console.log(req.user);
+    if( req.user ) {
+      res.render('scheduleAppt', {
+        user: req.user
+      });
+    } else {
+      res.status(401).render('login', { message : 'You need to login to view this page!'});
+    }
 });
-
-router.get('/cancelAppt', (req,res)=>{
-    res.render('cancelAppt');
+router.get('/cancelAppt', authController.isLoggedIn, (req, res) => {
+    console.log(req.user);
+    if( req.user ) {
+      res.render('cancelAppt', {
+        user: req.user
+      });
+    } else {
+      res.status(401).render('login', { message : 'You need to login to view this page!'});
+    }
 });
-
-router.get('/rescheduleAppt', (req,res)=>{
-    res.render('rescheduleAppt');
+router.get('/rescheduleAppt', authController.isLoggedIn, (req, res) => {
+    console.log(req.user);
+    if( req.user ) {
+      res.render('rescheduleAppt', {
+        user: req.user
+      });
+    } else {
+      res.status(401).render('login', { message : 'You need to login to view this page!'});
+    }
 });
-
 //****************** */
 router.get('/login', (req, res) =>{
     res.render('login');

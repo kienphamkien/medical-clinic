@@ -13,10 +13,10 @@ const { promisify } = require('util');
 // });
 
 const db = mysql.createConnection({
-    host: process.env.DATABASE_HOST, 
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE
+    host: process.env.host, 
+    user: process.env.user,
+    password: process.env.password,
+    database: process.env.database
 });
 
 exports.scheduleAppt= (req, res)=>{
@@ -24,7 +24,7 @@ exports.scheduleAppt= (req, res)=>{
 
     const{FName, LName, ID, reason, AppointDay,time,paymentMethod}= req.body
 
-        db.query('INSERT INTO APPOINTMENT set? ',{FName:FName, LName:LName, PatientID:ID, Reason:reason, InsuranceProv:paymentMethod, AppointDay:AppointDay}, (error, results)=>{
+        db.query('INSERT INTO APPOINTMENT set? ',{FName:FName, LName:LName, PatientID:ID, Reason:reason, InsuranceProv:paymentMethod, AppointDay:AppointDay, AppointTime:time}, (error, results)=>{
             if (error) {
                 console.log(error);
             } else {
@@ -77,7 +77,6 @@ exports.cancelAppt= (req,res)=>{
 
 
 }
-
 exports.rescheduleAppt=(req,res)=>{
     console.log(req.body);
 
@@ -101,17 +100,27 @@ exports.rescheduleAppt=(req,res)=>{
                     message: 'AppointmentID is incorrect'
                 })
             }
-        });
 
-        db.query('UPDATE APPOINTMENT SET ? WHERE AppointID=? AND PatientID= ? ', [{AppointDay:dateForAppt}, AppointID, patientID], async(error,results)=>{
-            if (error) {
-                console.log(error);
-            } else{
-                console.log(results);
-                return res.render('cancelAppt', {
-                    message: 'Appointment Rescheduled Succesfuly!'
-                })
-            }
+            db.query('SELECT AppointID from APPOINTMENT WHERE AppointID=? AND PatientID= ?', [AppointID, patientID], async(error, results)=>{
+                if (error) {
+                    console.log(error);
+                } 
+                if(results.length==0){
+                    return res.render('rescheduleAppt',{
+                        message: 'AppointmentID or PatientID is incorrect'
+                    })
+                }
+
+
+                db.query('UPDATE APPOINTMENT SET ? WHERE AppointID=? AND PatientID= ? ', [{AppointDay:dateForAppt, AppointTime:time}, AppointID, patientID], async(error,results)=>{
+                    if (error) {
+                        console.log(error);
+                    } else{
+                        console.log(results);
+                        return res.render('rescheduleAppt', {
+                            message: 'Appointment Rescheduled Succesfuly!'
+                        })
+                    }
+                });
+            });
         });
-    })
-}

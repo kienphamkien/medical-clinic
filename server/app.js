@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const session  = require('express-session');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 const path = require('path');
 
 const mysql = require("mysql");

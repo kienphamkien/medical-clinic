@@ -80,7 +80,6 @@ CREATE TABLE APPOINTMENT(
     isDeleted       INT DEFAULT 0, /* Attribute so we can perform soft deletes, in case an appointment is cancelled, instead of completely deleting the entry*/
     UNIQUE (PatientID),
     PRIMARY KEY (AppointID),
-    /*FOREIGN KEY (PatientID) REFERENCES PATIENT (PatientID), This statement wouldn't allow our patients to set up multiple appointments*/
     FOREIGN KEY (DoctorID) REFERENCES DOCTOR (DoctorID)
 );
 

@@ -12,33 +12,25 @@
     <nav>
         <h4>Medical Clinic</h4>
         <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/patient">My Profile</a></li>
+            <li><a href="/patient">Home</a></li>
+            <li><a href="/scheduleAppt">Schedule an Appointment</a></li>
+            <li><a href="/rescheduleAppt">Reschedule an Appointment</a></li>
+            <li><a href="/cancelAppt">Cancel an Appointment</a></li>
             <li><a href="/auth/logout">Logout</a></li>
         </ul>
     </nav>
     <div class="container mt-4"> <!-- Centers everything  -->
 
     <!-- In here youd place what you want inside your webpage -->
-
-        <h1 class="profile">Welcome to your profile page!</h1>
-        <p class="start">To get started simply click one of the options below.</p>
-
-         <div class="btn-group pb-4" role="group" aria-label="Basic outlined example">
-          <a href="/scheduleAppt" class="btn btn-outline-primary" aria-current="page">Schedule an Appointment</a>
-          <a href="/rescheduleAppt" class="btn btn-outline-primary">Reschedule an Appointment</a>
-          <a class="btn btn-outline-primary active">Cancel an Appointment</a>
-         </div>
-
         <form action="/auth/cancelAppt" method="POST">
             <div class="mb-3">
                 <label for="patientID" class="form-label">Patient ID</label>
-                <input type="text" class="patientID" id="patientID" name="patientID">
+                <input type="text" class="form-control" id="patientID" name="patientID">
             </div>
 
             <div class="mb-3">
                 <label for="apptID" class="form-label">Appointment ID</label>
-                <input type="text" class="apptID" id="apptID" name="apptID">
+                <input type="text" class="form-control" id="apptID" name="apptID">
             </div>
 
             <div class="mb-3">
@@ -46,7 +38,6 @@
                 <textarea class="form-control" id="reason" rows="3"></textarea>
             </div>
 
-            <a href="/patient" class="btn btn-secondary btn " tabindex="-1" role="button" aria-disabled="false">Cancel</a>
             <button type="submit" class="btn btn-primary">Submit</button>
 
         </form>

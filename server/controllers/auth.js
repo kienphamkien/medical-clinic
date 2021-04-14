@@ -4,12 +4,11 @@ const bcryptjs = require('bcryptjs');
 const { promisify } = require('util');
 
 const db = mysql.createConnection({
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE
+    host: process.env.host, 
+    user: process.env.user,
+    password: process.env.password,
+    database: process.env.database
 });
-
 /*
 //grabing all the data sent from the form and log into the terminal 
 exports.register = (req, res) => {
@@ -52,6 +51,8 @@ exports.register = (req, res) => {
 }
 
 exports.login = async (req, res) => {
+    var userInfo=[];
+    var apptinfo=[];
     try {
         const { Email, Password } = req.body;
         db.query('SELECT * FROM PATIENT WHERE Email = ?', [Email], async (error, results) => {
@@ -61,7 +62,7 @@ exports.login = async (req, res) => {
                     message: 'Email or Password is incorrect.'
                 })
             }
-            else if (!results.length) {
+            else if (!results.length) { 
                 res.status(401).render('login', {
                     message: 'Email or Password is incorrect.'
                 })
@@ -79,13 +80,55 @@ exports.login = async (req, res) => {
                     httpOnly: true
                 }
                 res.cookie('jwt', token, cookieOptions);
-                res.status(200).redirect("/patient");
+                res.status(200);
+                /********************* */
+                db.query('SELECT * FROM PATIENT WHERE PatientID= ?', [PatientID], async(error,result)=>{
+                    if(error){
+                        console.log(error);
+                    }else{
+                        var patientInfo={
+                            'FName': result[0].Fname,
+                            'LName': result[0].Lname,
+                            'PatientID': result[0].PatientID
+                        }
+                        userInfo.push(patientInfo);
+                    }   
+                }) 
+
+                db.query('SELECT * FROM APPOINTMENT WHERE PatientID= ?', [PatientID], async(error,result)=>{
+                    if(error){
+                        console.log(error);
+                    }else{
+                        if(result.length>=1){
+                            var appointmentInfo={
+                                'appointmentDate': result[0].AppointDay,
+                                'appointTime': result[0].AppointTime,
+                                'appointID':result[0].AppointID
+                            }
+                            apptinfo.push(appointmentInfo);
+                        }else{
+                            var date="You dont have any upcoming appointments";
+                            var time="You can schedule an appointment by hitting schedule an appointment at the top right";
+                            var id="You dont have any appointment ID.... yet"
+                            var appointmentInfo={
+                                'appointmentDate': date,
+                                'appointTime': time,
+                                'appointID': id
+                            }
+                            apptinfo.push(appointmentInfo);
+                        }
+                    }
+                    res.render('patient', {data:{"userInfo":userInfo,"apptinfo":apptinfo}});
+                })
+                /*  **************************/
             }
         });
     } catch (error) {
         console.log(error);
     }
 }
+
+
 
 exports.isLoggedIn = async (req, res, next) => {
     // console.log(req.cookies);

@@ -3,6 +3,15 @@ const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const { promisify } = require('util');
 
+
+// This is the connection to the Google Cloud SQL
+// const db = mysql.createConnection({
+//     host: "35.223.45.141", 
+//     user: "root",
+//     password: "team14",
+//     database: "clinic"
+// });
+
 const db = mysql.createConnection({
     host: process.env.host, 
     user: process.env.user,

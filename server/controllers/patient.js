@@ -124,3 +124,5 @@ exports.rescheduleAppt=(req,res)=>{
                 });
             });
         });
+    });
+}

@@ -3,13 +3,19 @@ const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const { promisify } = require('util');
 
-const db = mysql.createConnection({
-    host: process.env.host, 
-    user: process.env.user,
-    password: process.env.password,
-    database: process.env.database
-});
+//const db = mysql.createConnection({
+//    host: process.env.host, 
+//    user: process.env.user,
+//    password: process.env.password,
+//    database: process.env.database
+//});
 
+const db = mysql.createConnection({
+    host: process.env.DATABASE_HOST, 
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE
+});
 exports.fillMC= async(req,res)=>{
     console.log(req.body);
     const{PatientFName,PatientLName,AppointDay,time,summary,diagnosis}=req.body

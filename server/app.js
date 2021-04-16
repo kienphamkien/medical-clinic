@@ -8,13 +8,6 @@ const mysql = require("mysql");
 const dotenv = require("dotenv");
 dotenv.config({path:'./.env'});
 
-// This is the connection to the Google Cloud SQL
-// const db = mysql.createConnection({
-//     host: "35.223.45.141", 
-//     user: "root",
-//     password: "team14",
-//     database: "clinic"
-// });
 
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST, 

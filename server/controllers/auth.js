@@ -13,11 +13,12 @@ const { promisify } = require('util');
 // });
 
 const db = mysql.createConnection({
-    host: process.env.host, 
-    user: process.env.user,
-    password: process.env.password,
-    database: process.env.database
+    host: process.env.DATABASE_HOST, 
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE
 });
+
 /*
 //grabing all the data sent from the form and log into the terminal 
 exports.register = (req, res) => {
@@ -66,7 +67,7 @@ exports.login = async (req, res) => {
         const { Email, Password } = req.body;
         db.query('SELECT * FROM PATIENT WHERE Email = ?', [Email], async (error, results) => {
             console.log(results);
-            if (results.length && !(await bcryptjs.compare(Password, results[0].Pass))) {
+            if (!results && !(await bcryptjs.compare(Password, results[0].Password))) {
                 res.status(401).render('login', {
                     message: 'Email or Password is incorrect.'
                 })

@@ -12,13 +12,19 @@ const { promisify } = require('util');
 //     database: "clinic"
 // });
 
-const db = mysql.createConnection({
-    host: process.env.host, 
-    user: process.env.user,
-    password: process.env.password,
-    database: process.env.database
-});
+//const db = mysql.createConnection({
+//    host: process.env.host, 
+//    user: process.env.user,
+//    password: process.env.password,
+//    database: process.env.database
+//});
 
+const db = mysql.createConnection({
+    host: process.env.DATABASE_HOST, 
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE
+});
 exports.scheduleAppt= (req, res)=>{
     console.log(req.body);
 

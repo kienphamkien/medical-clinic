@@ -41,6 +41,6 @@ app.use('/', require('./routes/pages')); //
 app.use('/auth', require('./routes/auth'));//whatver starts 
 
 
-app.listen(5001, () => {
+app.listen(process.env.PORT || 5001, () => {
     console.log("Server started on Port 5001")
 })

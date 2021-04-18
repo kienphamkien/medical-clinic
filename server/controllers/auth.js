@@ -67,7 +67,7 @@ exports.login = async (req, res) => {
         const { Email, Password } = req.body;
         db.query('SELECT * FROM PATIENT WHERE Email = ?', [Email], async (error, results) => {
             console.log(results);
-            if (!results && !(await bcryptjs.compare(Password, results[0].Password))) {
+            if (!results || !(await bcryptjs.compare(Password, results[0].Pass))) {
                 res.status(401).render('login', {
                     message: 'Email or Password is incorrect.'
                 })

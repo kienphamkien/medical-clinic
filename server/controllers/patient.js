@@ -36,7 +36,7 @@ exports.scheduleAppt= (req, res)=>{
             } else {
                 console.log(results);
                 return res.render('scheduleAppt', {
-                    message: 'Appointment Succesfuly Scheduled!'
+                    message: 'Appointment Succesfully Scheduled!'
                 });
             }
         });

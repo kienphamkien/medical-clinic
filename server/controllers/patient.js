@@ -34,6 +34,10 @@ exports.scheduleAppt= (req, res)=>{
         db.query('INSERT INTO APPOINTMENT set? ',{FName:FName, LName:LName, PatientID:ID, Reason:reason, InsuranceProv:paymentMethod, AppointDay:AppointDay, AppointTime:time, ClinicID:clinic}, (error, results)=>{
             if (error) {
                 console.log(error);
+                return res.render('scheduleAppt', {
+                    message: 'Appointment Day is invalid!'
+                });
+
             } else {
                 console.log(results);
                 return res.render('scheduleAppt', {
@@ -122,6 +126,9 @@ exports.rescheduleAppt=(req,res)=>{
                 db.query('UPDATE APPOINTMENT SET ? WHERE AppointID=? AND PatientID= ? ', [{AppointDay:dateForAppt, AppointTime:time}, AppointID, patientID], async(error,results)=>{
                     if (error) {
                         console.log(error);
+                        return res.render('scheduleAppt', {
+                            message: 'Appointment Day is invalid!'
+                        });
                     } else{
                         console.log(results);
                         return res.render('rescheduleAppt', {

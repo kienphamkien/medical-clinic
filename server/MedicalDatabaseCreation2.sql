@@ -92,7 +92,6 @@ CREATE TABLE APPOINTMENT(
     Reason			VARCHAR(30),
     isDeleted       INT DEFAULT 0, /* Attribute so we can perform soft deletes, in case an appointment is cancelled, instead of completely deleting the entry*/
     ClinicID	INT,
-    UNIQUE (PatientID),
     PRIMARY KEY (AppointID),
     FOREIGN KEY (DoctorID) REFERENCES DOCTOR (DoctorID)
 );

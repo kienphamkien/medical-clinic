@@ -20,17 +20,18 @@ const { promisify } = require('util');
 //});
 
 const db = mysql.createConnection({
-    host: process.env.DATABASE_HOST, 
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE
+    host: "35.223.45.141", 
+    user: "root",
+    password: "team14",
+    database: "clinic"
 });
+
 exports.scheduleAppt= (req, res)=>{
     console.log(req.body);
 
-    const{FName, LName, ID, reason, AppointDay,time,paymentMethod}= req.body
+    const{FName, LName, ID, reason, AppointDay,time,paymentMethod, clinic}= req.body
 
-        db.query('INSERT INTO APPOINTMENT set? ',{FName:FName, LName:LName, PatientID:ID, Reason:reason, InsuranceProv:paymentMethod, AppointDay:AppointDay, AppointTime:time}, (error, results)=>{
+        db.query('INSERT INTO APPOINTMENT set? ',{FName:FName, LName:LName, PatientID:ID, Reason:reason, InsuranceProv:paymentMethod, AppointDay:AppointDay, AppointTime:time, ClinicID:clinic}, (error, results)=>{
             if (error) {
                 console.log(error);
             } else {

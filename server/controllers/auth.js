@@ -50,6 +50,9 @@ exports.register = (req, res) => {
             console.log(results);
             if (error) {
                 console.log(error);
+                return res.render('login', {
+                    message: 'Date of Birth invalid!'
+                });
             } else {
                 console.log(results);
                 return res.render('login', {

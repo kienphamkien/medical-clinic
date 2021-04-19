@@ -266,13 +266,26 @@ exports.login = async (req, res) => {
                                 console.log(error);
                             }else{
                                 if(result.length>=1){
-                                    var appointmentInfo={
-                                        'appointmentDate': result[0].AppointDay,
-                                        'appointTime': result[0].AppointTime,
-                                        'appointID':result[0].AppointID
+                                    if(result[0].isDeleted != 1){
+                                        var appointmentInfo={
+                                            'appointmentDate': result[0].AppointDay,
+                                            'appointTime': result[0].AppointTime,
+                                            'appointID':result[0].AppointID
+                                        }
+                                        apptinfo.push(appointmentInfo);
+                                    } else {
+                                        var date="You dont have any upcoming appointments";
+                                        var time="You can schedule an appointment by hitting schedule an appointment at the top right";
+                                        var id="You dont have any appointment ID.... yet"
+                                        var appointmentInfo={
+                                        'appointmentDate': date,
+                                        'appointTime': time,
+                                        'appointID': id
                                     }
                                     apptinfo.push(appointmentInfo);
-                                }else{
+
+                                    }
+                                }else {
                                     var date="You dont have any upcoming appointments";
                                     var time="You can schedule an appointment by hitting schedule an appointment at the top right";
                                     var id="You dont have any appointment ID.... yet"

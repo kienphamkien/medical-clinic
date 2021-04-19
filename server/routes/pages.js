@@ -79,4 +79,22 @@ router.get('/fillMC', (req,res)=>{
     res.render('fillMC.hbs');
 });
 
+
+//manager
+router.get('/manager',(req,res)=>{
+  res.render('manager.hbs');
+});
+
+router.get('/registerDoctor', (req,res)=>{
+  res.render('registerDoctor.hbs');
+});
+
+router.get('/staffReport', (req,res)=>{
+  res.render('staffReport.hbs');
+});
+
+router.get('/apptReport', (req,res)=>{
+  res.render('apptReport.hbs');
+});
+
 module.exports = router;

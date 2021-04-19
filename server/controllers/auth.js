@@ -5,20 +5,20 @@ const { promisify } = require('util');
 
 
 // This is the connection to the Google Cloud SQL
-// const db = mysql.createConnection({
-//     host: "35.223.45.141", 
-//     user: "root",
-//     password: "team14",
-//     database: "clinic"
-// });
-
+ const db = mysql.createConnection({
+     host: "35.223.45.141", 
+     user: "root",
+     password: "team14",
+     database: "clinic"
+});
+/*
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST, 
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE
 });
-
+*/
 /*
 //grabing all the data sent from the form and log into the terminal 
 exports.register = (req, res) => {
@@ -60,6 +60,7 @@ exports.register = (req, res) => {
     });
 }
 
+/*
 exports.login = async (req, res) => {
     var userInfo=[];
     var apptinfo=[];
@@ -91,7 +92,7 @@ exports.login = async (req, res) => {
                 }
                 res.cookie('jwt', token, cookieOptions);
                 res.status(200);
-                /********************* */
+                
                 db.query('SELECT * FROM PATIENT WHERE PatientID= ?', [PatientID], async(error,result)=>{
                     if(error){
                         console.log(error);
@@ -130,13 +131,168 @@ exports.login = async (req, res) => {
                     }
                     res.render('patient', {data:{"userInfo":userInfo,"apptinfo":apptinfo}});
                 })
-                /*  **************************/
+                
             }
         });
     } catch (error) {
         console.log(error);
     }
 }
+
+*/
+
+exports.login = async (req, res) => {
+    var userInfo=[];
+    var apptinfo=[];
+    try {
+        const { Email, Password } = req.body;
+        db.query('SELECT * FROM PATIENT WHERE Email=?', [Email], async(error,results)=>{
+            if(results.length==0){
+                db.query('SELECT * FROM DOCTOR WHERE Email=?', [Email], async(error,result)=>{
+                    if(result.length!=0) {
+                        console.log(result);
+                        if (!result || !(await bcryptjs.compare(Password, result[0].Pass))) {
+                            res.status(401).render('login', {
+                            message: 'Email or Password is incorrect.'
+                            })
+                        }else if (!result.length) { 
+                            res.status(401).render('login', {
+                                message: 'Email or Password is incorrect.'
+                            })
+                        }else {
+                            const DoctorID = result[0].DoctorID;
+                            const token = jwt.sign({ DoctorID }, process.env.JWT_SECRET, {
+                                expiresIn: process.env.JWT_EXPIRES_IN
+                            });
+                            console.log("The token is: " + token);
+                            const cookieOptions = {
+                                expires: new Date(
+                                    Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+                                    ),
+                                    httpOnly: true
+                                }
+                                res.cookie('jwt', token, cookieOptions);
+                                res.status(200);
+                                res.render('staff');
+                        }
+                    }else if(result.length==0){
+                        /*
+                        console.log(result);
+                        res.status(401).render('login', {
+                            message: 'Email or Password is incorrect.'
+                        })*/
+
+                        db.query('SELECT * FROM MANAGER WHERE Email= ?', [Email], async(error,results)=>{
+                            console.log(results.length);
+                            if(results.length!=0) {
+                                console.log(results);
+                                if (!results || Password!=results[0].Pass) { //Need to find a way to encrypt the manager password
+                                    res.status(401).render('login', {
+                                    message: 'Email or Password is incorrect.'
+                                    })
+                                }else if (!results.length) { 
+                                    res.status(401).render('login', {
+                                        message: 'Email or Password is incorrect.'
+                                    })
+                                }else {
+                                    const ManagerID = results[0].ManagerID;
+                                    const token = jwt.sign({ ManagerID }, process.env.JWT_SECRET, {
+                                        expiresIn: process.env.JWT_EXPIRES_IN
+                                    });
+                                    console.log("The token is: " + token);
+                                    const cookieOptions = {
+                                        expires: new Date(
+                                            Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+                                            ),
+                                            httpOnly: true
+                                        }
+                                        res.cookie('jwt', token, cookieOptions);
+                                        res.status(200);
+                                        res.render('manager');
+                                }
+                            }else if(results.length==0){
+                                console.log(result);
+                                res.status(401).render('login', {
+                                    message: 'Email or Password is incorrect.'
+                                })
+                            }
+                        })
+
+
+
+
+                    }
+                });
+            }else{
+                console.log(results);
+                if (!results || !(await bcryptjs.compare(Password, results[0].Pass))) {
+                    res.status(401).render('login', {
+                        message: 'Email or Password is incorrect.'
+                    })
+                }
+                else if (!results.length) { 
+                    res.status(401).render('login', {
+                        message: 'Email or Password is incorrect.'
+                    })
+                }
+                else {
+                    const PatientID = results[0].PatientID;
+                    const token = jwt.sign({ PatientID }, process.env.JWT_SECRET, {
+                        expiresIn: process.env.JWT_EXPIRES_IN
+                    });
+                    console.log("The token is: " + token);
+                    const cookieOptions = {
+                        expires: new Date(
+                            Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+                            ),
+                            httpOnly: true
+                        }
+                        res.cookie('jwt', token, cookieOptions);
+                        res.status(200);
+                        db.query('SELECT * FROM PATIENT WHERE PatientID= ?', [PatientID], async(error,result)=>{
+                            if(error){
+                                console.log(error);
+                            }else{
+                                var patientInfo={
+                                    'FName': result[0].Fname,
+                                    'LName': result[0].Lname,
+                                    'PatientID': result[0].PatientID
+                                }
+                                userInfo.push(patientInfo);
+                            }   
+                        }) 
+                        db.query('SELECT * FROM APPOINTMENT WHERE PatientID= ?', [PatientID], async(error,result)=>{
+                            if(error){
+                                console.log(error);
+                            }else{
+                                if(result.length>=1){
+                                    var appointmentInfo={
+                                        'appointmentDate': result[0].AppointDay,
+                                        'appointTime': result[0].AppointTime,
+                                        'appointID':result[0].AppointID
+                                    }
+                                    apptinfo.push(appointmentInfo);
+                                }else{
+                                    var date="You dont have any upcoming appointments";
+                                    var time="You can schedule an appointment by hitting schedule an appointment at the top right";
+                                    var id="You dont have any appointment ID.... yet"
+                                    var appointmentInfo={
+                                        'appointmentDate': date,
+                                        'appointTime': time,
+                                        'appointID': id
+                                    }
+                                    apptinfo.push(appointmentInfo);
+                                }
+                            }
+                            res.render('patient', {data:{"userInfo":userInfo,"apptinfo":apptinfo}});
+                        })
+                    }
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }    
 
 
 

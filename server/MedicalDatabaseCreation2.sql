@@ -1,5 +1,5 @@
 CREATE TABLE CLINIC(
-	ClinicID		INT,
+	ClinicID		INT AUTO_INCREMENT,
     Address 		VARCHAR(30) NOT NULL,
     NumPatients 	INT,
     NumDoctors 		INT,
@@ -12,9 +12,11 @@ CREATE TABLE DOCTOR(
     Minit			CHAR,
     Lname			VARCHAR(15)	NOT NULL,
     Address 		VARCHAR(30),
-    DoctorID 		INT,
-    PhoneNumber 	INT	NOT NULL,
+    DoctorID 		INT AUTO_INCREMENT,
+    PhoneNumber 	VARCHAR(15) NOT NULL,
     DOB				DATE,
+    Email 			VARCHAR(30),
+    Pass 		VARCHAR(200),
     ClinicID	INT,
     PRIMARY KEY (DoctorID),
     FOREIGN KEY (ClinicID) REFERENCES CLINIC(ClinicID)
@@ -53,6 +55,17 @@ CREATE TABLE EMERGENCY_CONTACT(
     FOREIGN KEY (ContactID) REFERENCES PATIENT(PatientID)
 );
 
+CREATE TABLE MANAGER(
+    ManagerID       INT AUTO_INCREMENT,
+    Fname			VARCHAR(15) NOT NULL,
+    Minit			VARCHAR(5),
+    Lname			VARCHAR(15) NOT NULL,
+    Email 			VARCHAR(30),
+    Pass 		    VARCHAR(200),
+    ClinicID        INT,
+    PRIMARY KEY (ManagerID),
+    FOREIGN KEY (ClinicID) REFERENCES CLINIC(ClinicID)
+);
 
 CREATE TABLE MEDICAL_CHART(
 	PatientID		INT,
@@ -78,6 +91,7 @@ CREATE TABLE APPOINTMENT(
     InsuranceProv	VARCHAR(15),
     Reason			VARCHAR(30),
     isDeleted       INT DEFAULT 0, /* Attribute so we can perform soft deletes, in case an appointment is cancelled, instead of completely deleting the entry*/
+    ClinicID	INT,
     UNIQUE (PatientID),
     PRIMARY KEY (AppointID),
     FOREIGN KEY (DoctorID) REFERENCES DOCTOR (DoctorID)
@@ -89,26 +103,6 @@ CREATE TABLE APPOINTMENT_REPORT(
     Summary			VARCHAR(100),
     PRIMARY KEY (AppointID),
     FOREIGN KEY (AppointID) REFERENCES APPOINTMENT (AppointID)
-);
-
-CREATE TABLE StaffRole(
-    RoleName VARCHAR(30),
-    RoleNo INT,
-    RoleDescription VARCHAR(200),
-    PRIMARY KEY (RoleNo)
-);
-
-CREATE TABLE STAFF(
-    StaffID        INT,
-	StaffRoleNo		INT,
-	Fname			VARCHAR(15)				NOT NULL,
-    Minit			CHAR,
-    Lname			VARCHAR(15)				NOT NULL,
-    Address 		VARCHAR(30),
-    PhoneNumber 	INT						NOT NULL,
-    DOB				DATE,
-    PRIMARY KEY (StaffID),
-	FOREIGN KEY (StaffRoleNo) REFERENCES StaffRole(RoleNo)
 );
 
 DELIMITER $$

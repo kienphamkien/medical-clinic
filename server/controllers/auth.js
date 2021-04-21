@@ -5,7 +5,7 @@ const { promisify } = require('util');
 
 
 // This is the connection to the Google Cloud SQL
-
+/*
  const db = mysql.createConnection({
      host: "35.223.45.141", 
      user: "root",
@@ -13,14 +13,14 @@ const { promisify } = require('util');
      database: "clinic"
 });
 
-/*
+*/
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST, 
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE
 });
-*/
+
 /*
 //grabing all the data sent from the form and log into the terminal 
 exports.register = (req, res) => {
@@ -265,30 +265,23 @@ exports.login = async (req, res) => {
                                 }
                                 userInfo.push(patientInfo);
                             }   
-                        }) 
+                        })
                         db.query('SELECT * FROM APPOINTMENT WHERE PatientID= ?', [PatientID], async(error,result)=>{
+                            var appointmentInfo;
                             if(error){
                                 console.log(error);
                             }else{
                                 if(result.length>=1){
-                                    if(result[0].isDeleted != 1){
-                                        var appointmentInfo={
-                                            'appointmentDate': result[0].AppointDay,
-                                            'appointTime': result[0].AppointTime,
-                                            'appointID':result[0].AppointID
+                                    for(i=0; i<result.length; i++){
+                                        if(result[i].isDeleted != 1){
+                                            appointmentInfo={
+                                                'appointmentDate': result[i].AppointDay,
+                                                'appointTime': result[i].AppointTime,
+                                                'appointID':result[i].AppointID
+                                            }
+                                            apptinfo.push(appointmentInfo);
                                         }
-                                        apptinfo.push(appointmentInfo);
-                                    } else {
-                                        var date="You dont have any upcoming appointments";
-                                        var time="You can schedule an appointment by hitting schedule an appointment at the top right";
-                                        var id="You dont have any appointment ID.... yet"
-                                        var appointmentInfo={
-                                        'appointmentDate': date,
-                                        'appointTime': time,
-                                        'appointID': id
-                                    }
-                                    apptinfo.push(appointmentInfo);
-
+                                        
                                     }
                                 }else {
                                     var date="You dont have any upcoming appointments";
@@ -302,15 +295,18 @@ exports.login = async (req, res) => {
                                     apptinfo.push(appointmentInfo);
                                 }
                             }
-                            res.render('patient', {data:{"userInfo":userInfo,"apptinfo":apptinfo}});
+
+                            const sortedAppt= apptinfo.sort((a,b)=>a.appointmentDate-b.appointmentDate)
+                            //res.render('patient', {data:{"userInfo":userInfo,"apptinfo":apptinfo}});
+                            res.render('patient', {data:{"userInfo":userInfo,"sortedAppt":sortedAppt}});
                         })
                     }
                 }
             })
-        } catch (error) {
-            console.log(error)
-        }
-    }    
+    } catch (error) {
+        console.log(error)
+    }
+}    
 
 
 

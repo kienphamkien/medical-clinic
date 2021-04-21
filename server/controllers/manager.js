@@ -2,21 +2,21 @@ const mysql = require("mysql");
 const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const { promisify } = require('util');
-
+/*
 const db = mysql.createConnection({
     host: "35.223.45.141", 
     user: "root",
     password: "team14",
     database: "clinic"
 });
-/*
+*/
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST, 
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE
 });
-*/
+
 
 exports.registerDoctor = (req, res) => {
     console.log(req.body);
@@ -80,15 +80,20 @@ exports.apptReport= (req,res)=>{
                 }
                 appt.push(info)
             }
-            return res.render('apptReport', {"appt":appt});
+            const sortedAppt= appt.sort((a,b)=> a.AppointDay-b.AppointDay)
+            //return res.render('apptReport', {"appt":appt});
+            return res.render('apptReport', {"sortedAppt":sortedAppt});
         }
     })
 }
 
 exports.staffReport=(req,res)=>{
     console.log(req.body);
-    const{clinic}= req.body
+    const{clinic,startingDate,endingDate}= req.body
     var staff=[];
+    var clinics=[];
+    var count=[3];
+    var notDeleted= 1;
     db.query('SELECT * FROM DOCTOR WHERE ClinicID= ?', [clinic],async(error,results)=>{
         if(error){
             console.log(error);
@@ -108,8 +113,49 @@ exports.staffReport=(req,res)=>{
                 }
                 staff.push(info);
             }
-            return res.render ('staffReport',{"staff":staff});
+            //return res.render ('staffReport',{"staff":staff});
         }
-    })
+    //})
+
+    db.query('SELECT * from APPOINTMENT WHERE AppointDay BETWEEN ? and ? and isDeleted!= ?', [startingDate, endingDate, notDeleted], async(error,results)=>{
+        if(error){
+            console.log(error);
+        }else if (results.length==0){
+            return res.render('apptReport',{
+                message: 'No appointments during the selected dates'
+            });
+        }else{
+            var clinic1Total=0;
+            var clinic2Total=0;
+            var clinic3Total=0; 
+            var clinicAppt;
+            for(i=0; i<results.length; i++){
+                if(results[i].ClinicID==1 && results[i].isDeleted==0){
+                     //count[0]=count[0]+1;
+                    //clinicAppt.Clinic1= clinicAppt.Clinic1+1;
+                    clinic1Total+=1;
+                }else if(results[i].ClinicID==2 && results[i].isDeleted==0){
+                    //count[1]=count[1]+1;
+                    //clinicAppt.Clinic2= clinicAppt.Clinic2+1;
+                    clinic2Total+=1;
+                }else if(results[i].ClinicID==3&& results[i].isDeleted==0){
+                    //count[2]=count[2]+1;
+                    //clinicAppt.Clinic3= clinicAppt.Clinic3+1;
+                    clinic3Total+=1;
+                }
+                //clinics.push(clinicAppt);
+            }
+            clinicAppt={
+                'Clinic1': clinic1Total,
+                'Clinic2': clinic2Total,
+                'Clinic3': clinic3Total
+            };
+            clinics.push(clinicAppt);
+        }
+        return res.render ('staffReport',{data:{"staff":staff,"clinics":clinics}});
+    });
+    
+})
+    //return res.render ('staffReport',{"staff":staff});
 
 }

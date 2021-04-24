@@ -52,12 +52,75 @@ exports.registerDoctor = (req, res) => {
     });
 }
 
+exports.patientReport= (req,res)=>{
+    console.log(req.body);
+    const{Fname,Lname}= req.body
+    var patient=[];
+    var stat = [];
+    var notDeleted= 1;
+    var values = ""; 
+    var values2;
+
+    
+    if(Fname.length == 0 && Lname == 0)
+        return null;
+    else if(Fname.length != 0 && Lname != 0){
+        values = "Fname = ? AND Lname";
+        values2 = [Fname, Lname];
+    }
+    else if(Fname.length != 0){
+        values = "Fname = ?";
+        values2 = [Fname];
+    }
+    else if(Lname.length != 0){
+        values = "Lname = ?";
+        values2 = [Lname];
+    }
+    
+
+    db.query('SELECT * from PATIENT WHERE  ' + values + '', values2, async(error,results)=>{
+        if(error){
+            console.log(error);
+            return res.render('patientReport', {
+                message: 'Test error path!'
+            })
+        }else if (results.length==0){
+            return res.render('patientReport',{
+                message: 'No patients found.'
+            });
+        }else{
+
+            var numOfPatients = results.length;
+            stats= {
+                'numOfPatients':numOfPatients
+            }
+            stat.push(stats);
+            var info;
+            for(i=0; i<results.length; i++){
+                info={
+                    'PatientID':results[i].PatientID,
+                    'Fname':results[i].Fname,
+                    'Lname':results[i].Lname,
+                    'DOB':results[i].DOB,
+                    'PNumber':results[i].PhoneNumber,
+                    'Address':results[i].Address,
+                    'EmailAddress':results[i].Email
+                }
+                patient.push(info)
+            }
+            //const sortedAppt= patient.sort((a,b)=> a.AppointDay-b.AppointDay)
+            //return res.render('apptReport', {"appt":appt});
+            return res.render('patientReport', {data:{"stat":stat,"patient":patient}});
+        }
+    })
+}
+
 exports.apptReport= (req,res)=>{
     console.log(req.body);
     const{clinic,startingDate,endingDate}= req.body
     var appt=[];
+    var stat =[]
     var notDeleted= 1;
-
     db.query('SELECT * from APPOINTMENT WHERE ClinicID= ? and AppointDay BETWEEN ? and ? and isDeleted!= ?', [clinic, startingDate, endingDate, notDeleted], async(error,results)=>{
         if(error){
             console.log(error);
@@ -66,7 +129,12 @@ exports.apptReport= (req,res)=>{
                 message: 'No appointments during the selected dates'
             });
         }else{
-            var info;
+            var numOfAppoint = results.length;
+            stats= {
+                'numOfAppoint':numOfAppoint
+            }
+            stat.push(stats);
+
             for(i=0; i<results.length; i++){
                 info={
                     'AppointID':results[i].AppointID,
@@ -76,13 +144,16 @@ exports.apptReport= (req,res)=>{
                     'LName':results[i].LName,
                     'InsuranceProv':results[i].InsuranceProv,
                     'Reason':results[i].Reason,
-                    'ClinicID':results[i].ClinicID
+                    'ClinicID':results[i].ClinicID,
+                    //'NumOfAppoint':results.length
                 }
                 appt.push(info)
+                
             }
+            
             const sortedAppt= appt.sort((a,b)=> a.AppointDay-b.AppointDay)
             //return res.render('apptReport', {"appt":appt});
-            return res.render('apptReport', {"sortedAppt":sortedAppt});
+            return res.render('apptReport',{data:{"stat":stat,"sortedAppt":sortedAppt}});
         }
     })
 }

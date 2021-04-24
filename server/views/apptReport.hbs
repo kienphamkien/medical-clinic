@@ -14,6 +14,7 @@
         <ul>
             <li><a href="/manager">Home</a></li>
             <li><a href="/registerDoctor">Register a new doctor</a></li>
+            <li><a href="/patientReport">Patient report</a></li>
             <li><a href="/apptReport">Appointment report</a></li>
             <li><a href="/staffReport">Staff report</a></li>
             <li><a href="/auth/logout">Logout</a></li>
@@ -45,7 +46,13 @@
                 </div>
 
             </div>
-
+            
+            {{#each data.stat}}
+             <dl class="dl-horizontal">
+                    <dt>Number of appointments</dt>
+                    <dd>    {{numOfAppoint}}</dd>
+                </dl>
+            {{/each}}
             <table class="table table-striped">
                 <thead>
                     <th scope="col">Appointment ID</th>
@@ -57,7 +64,7 @@
                     <th scope="col">Reason for Visit</th>
                     <th scope="col">Clinic Location</th>
                 </thead>
-                {{#each sortedAppt}}
+                {{#each data.sortedAppt}}
                 <tr>
                     <td>{{AppointID}}</td>
                     <td>{{AppointDay}}</td>

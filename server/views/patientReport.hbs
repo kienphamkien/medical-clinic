@@ -23,61 +23,53 @@
         </ul>
     </nav>
     <div class="container mt-4"> <!-- Centers everything  -->
-    <p> File a report in order to see the staff available at your clinic: </p>
+    <p> Search patients or patient below </p>
     <!-- In here youd place what you want inside your webpage -->
-        <form action="/auth/staffReport" method="POST">
-            <div class="row g-3">
-                 <div class="col-sm">
-                    <label class="form-label" for="clinic">Clinic</label>
-                    <select class="form-select" id="clinic" name="clinic">
-                        <option selected>Choose...</option>
-                        <option value="1">Houston Location</option>
-                        <option value="2">Katy Location</option>
-                        <option value="3">Humble Location</option>
-                    </select>
-                </div>
+        <form action="/auth/patientReport" method="POST">
+            
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">First Name </span>
+                <input type="text" class="form-control" id="Fname" name="Fname" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
             </div>
-            <div class="row g-2">
-                <div class="col-sm">
-                    <label for="startingDate" class="form-label">Select Starting Date</label>
-                    <input type="date" class="form-control" id="startingDate" name= "startingDate">
-                </div>
-
-                <div class="col-sm">
-                    <label for="endingDate" class="form-label">Select Ending Date</label>
-                    <input type="date" class="form-control" id="endingDate" name= "endingDate">
-                </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Last Name  </span>
+                <input type="text" class="form-control" id="Lname" name="Lname" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
             </div>
+            
+            {{#each data.stat}}
+             <dl class="dl-horizontal">
+                    <dt>Number of patients</dt>
+                    <dd>    {{numOfPatients}}</dd>
+                </dl>
+            {{/each}}
             <table class="table table-striped">
                 <thead>
-                    <th scope="col">Staff Members First Name</th>
-                    <th scope="col">Staff Members Last Name</th>
-                    <th scope="col">Staff ID</th>
+                    <th scope="col">Patient ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Date Of Birth</th>
                     <th scope="col">Phone Number</th>
+                    <th scope="col">Address</th>
                     <th scope="col">Email Address</th>
+
+
                 </thead>
-                {{#each data.staff}}
+                {{#each data.patient}}
                 <tr>
+                    <td>{{PatientID}}</td>
                     <td>{{Fname}}</td>
                     <td>{{Lname}}</td>
-                    <td>{{DoctorID}}</td>
-                    <td>{{pnumber}}</td>
-                    <td>{{Email}}</td>
+                    <td>{{DOB}}</td>
+                    <td>{{PNumber}}</td>
+                    <td>{{Address}}</td>
+                    <td>{{EmailAddress}}</td>
+
                 </tr>
                 {{/each}}
 
             </table>
 
-            {{#each data.clinics}}
-                <dl class="dl-horizontal">
-                    <dt>Number of appointments scheduled for Houston</dt>
-                    <dd>{{Clinic1}}</dd>
-                    <dt>Number of appointments scheduled for Katy </dt>
-                    <dd>{{Clinic2}}</dd>
-                    <dt>Number of appointments scheduled for Humble</dt>
-                    <dd>{{Clinic3}}</dd>
-                </dl>
-            {{/each}}
+        
             <button type="submit" class="btn btn-primary">Submit</button>
 
         </form>

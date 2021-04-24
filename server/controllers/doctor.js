@@ -4,21 +4,21 @@ const bcryptjs = require('bcryptjs');
 const { promisify } = require('util');
 
 //const db = mysql.createConnection({
-
+/*
 const db = mysql.createConnection({
     host: "35.223.45.141", 
     user: "root",
     password: "team14",
     database: "clinic"
 });
-/*
+*/
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST, 
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE
 });
-*/
+
 exports.fillMC= async(req,res)=>{
     console.log(req.body);
     const{PatientFName,PatientLName,AppointDay,time,summary,diagnosis}=req.body
@@ -61,7 +61,7 @@ exports.createMC= async(req,res)=>{
             if(error){
                 console.log(error);
             }
-            if(results.length>0){
+            if(result.length>0){
                 return res.render('createMC',{
                     message: 'The patient already has a medical chart'
                 })
@@ -109,7 +109,7 @@ exports.requestMC= async(req,res) =>{
                     'bloodType': result[0].BloodType,
                     'height':result[0].Height,
                     'weight':result[0].Weight,
-                    'famHistory':results[0].FamilyHist,
+                    'famHistory':result[0].FamilyHist,
                     'surgical':result[0].SurgicalHist,
                     'allergies':result[0].Allergies
                 }

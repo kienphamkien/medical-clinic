@@ -29,5 +29,6 @@ router.post('/requestMC', doctorController.requestMC)
 router.post('/registerDoctor', managerController.registerDoctor);
 router.post('/apptReport', managerController.apptReport);
 router.post('/staffReport', managerController.staffReport);
+router.post('/patientReport', managerController.patientReport);
 /*Here is wehre you'd create the route for user page*/ 
 module.exports = router; //required for the code to work 

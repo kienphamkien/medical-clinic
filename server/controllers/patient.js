@@ -27,6 +27,8 @@ const db = mysql.createConnection({
     database: "clinic"
 });
 */
+
+
 exports.scheduleAppt= (req, res)=>{
     console.log(req.body);
 

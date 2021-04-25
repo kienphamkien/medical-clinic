@@ -65,87 +65,6 @@ exports.register = (req, res) => {
     });
 }
 
-/*
-exports.login = async (req, res) => {
-    var userInfo=[];
-    var apptinfo=[];
-    try {
-        const { Email, Password } = req.body;
-        db.query('SELECT * FROM PATIENT WHERE Email = ?', [Email], async (error, results) => {
-            console.log(results);
-            if (!results || !(await bcryptjs.compare(Password, results[0].Pass))) {
-                res.status(401).render('login', {
-                    message: 'Email or Password is incorrect.'
-                })
-            }
-            else if (!results.length) { 
-                res.status(401).render('login', {
-                    message: 'Email or Password is incorrect.'
-                })
-            }
-            else {
-                const PatientID = results[0].PatientID;
-                const token = jwt.sign({ PatientID }, process.env.JWT_SECRET, {
-                    expiresIn: process.env.JWT_EXPIRES_IN
-                });
-                console.log("The token is: " + token);
-                const cookieOptions = {
-                    expires: new Date(
-                        Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-                    ),
-                    httpOnly: true
-                }
-                res.cookie('jwt', token, cookieOptions);
-                res.status(200);
-                
-                db.query('SELECT * FROM PATIENT WHERE PatientID= ?', [PatientID], async(error,result)=>{
-                    if(error){
-                        console.log(error);
-                    }else{
-                        var patientInfo={
-                            'FName': result[0].Fname,
-                            'LName': result[0].Lname,
-                            'PatientID': result[0].PatientID
-                        }
-                        userInfo.push(patientInfo);
-                    }   
-                }) 
-
-                db.query('SELECT * FROM APPOINTMENT WHERE PatientID= ?', [PatientID], async(error,result)=>{
-                    if(error){
-                        console.log(error);
-                    }else{
-                        if(result.length>=1){
-                            var appointmentInfo={
-                                'appointmentDate': result[0].AppointDay,
-                                'appointTime': result[0].AppointTime,
-                                'appointID':result[0].AppointID
-                            }
-                            apptinfo.push(appointmentInfo);
-                        }else{
-                            var date="You dont have any upcoming appointments";
-                            var time="You can schedule an appointment by hitting schedule an appointment at the top right";
-                            var id="You dont have any appointment ID.... yet"
-                            var appointmentInfo={
-                                'appointmentDate': date,
-                                'appointTime': time,
-                                'appointID': id
-                            }
-                            apptinfo.push(appointmentInfo);
-                        }
-                    }
-                    res.render('patient', {data:{"userInfo":userInfo,"apptinfo":apptinfo}});
-                })
-                
-            }
-        });
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-*/
-
 exports.login = async (req, res) => {
     var userInfo=[];
     var apptinfo=[];
@@ -222,10 +141,6 @@ exports.login = async (req, res) => {
                                 })
                             }
                         })
-
-
-
-
                     }
                 });
             }else{
@@ -254,52 +169,7 @@ exports.login = async (req, res) => {
                         }
                         res.cookie('jwt', token, cookieOptions);
                         res.status(200);
-                        db.query('SELECT * FROM PATIENT WHERE PatientID= ?', [PatientID], async(error,result)=>{
-                            if(error){
-                                console.log(error);
-                            }else{
-                                var patientInfo={
-                                    'FName': result[0].Fname,
-                                    'LName': result[0].Lname,
-                                    'PatientID': result[0].PatientID
-                                }
-                                userInfo.push(patientInfo);
-                            }   
-                        })
-                        db.query('SELECT * FROM APPOINTMENT WHERE PatientID= ?', [PatientID], async(error,result)=>{
-                            var appointmentInfo;
-                            if(error){
-                                console.log(error);
-                            }else{
-                                if(result.length>=1){
-                                    for(i=0; i<result.length; i++){
-                                        if(result[i].isDeleted != 1){
-                                            appointmentInfo={
-                                                'appointmentDate': result[i].AppointDay,
-                                                'appointTime': result[i].AppointTime,
-                                                'appointID':result[i].AppointID
-                                            }
-                                            apptinfo.push(appointmentInfo);
-                                        }
-                                        
-                                    }
-                                }else {
-                                    var date="You dont have any upcoming appointments";
-                                    var time="You can schedule an appointment by hitting schedule an appointment at the top right";
-                                    var id="You dont have any appointment ID.... yet"
-                                    var appointmentInfo={
-                                        'appointmentDate': date,
-                                        'appointTime': time,
-                                        'appointID': id
-                                    }
-                                    apptinfo.push(appointmentInfo);
-                                }
-                            }
-
-                            const sortedAppt= apptinfo.sort((a,b)=>a.appointmentDate-b.appointmentDate)
-                            //res.render('patient', {data:{"userInfo":userInfo,"apptinfo":apptinfo}});
-                            res.render('patient', {data:{"userInfo":userInfo,"sortedAppt":sortedAppt}});
-                        })
+                        res.redirect('../patient');
                     }
                 }
             })

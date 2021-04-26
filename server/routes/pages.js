@@ -84,6 +84,7 @@ router.get('/patient', authController.isLoggedIn, (req, res) => {
       }
 
       const sortedAppt = apptinfo.sort((a, b) => a.appointmentDate - b.appointmentDate)
+      req.app.locals.showAppt = sortedAppt
       res.render('patient', { data: { "userInfo": userInfo, "sortedAppt": sortedAppt } });
     })
   } else {
@@ -101,11 +102,12 @@ router.get('/scheduleAppt', authController.isLoggedIn, (req, res) => {
     res.status(401).render('login', { message: 'You need to login to view this page!' });
   }
 });
+
 router.get('/cancelAppt', authController.isLoggedIn, (req, res) => {
   console.log(req.user);
   if (req.user.PatientID) {
     res.render('cancelAppt', {
-      user: req.user
+      user: req.user, data: { "sortedAppt":  req.app.locals.showAppt  }
     });
   } else {
     res.status(401).render('login', { message: 'You need to login to view this page!' });
@@ -115,7 +117,7 @@ router.get('/rescheduleAppt', authController.isLoggedIn, (req, res) => {
   console.log(req.user);
   if (req.user.PatientID) {
     res.render('rescheduleAppt', {
-      user: req.user
+      user: req.user, data: { "sortedAppt":  req.app.locals.showAppt  }
     });
   } else {
     res.status(401).render('login', { message: 'You need to login to view this page!' });
